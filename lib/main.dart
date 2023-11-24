@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xlox_flutter/structure.dart';
 import 'package:xlox_flutter/ui/home.dart';
 
-Structure S = Structure();
+Structure s = Structure(0);
 
 void main() {
   runApp(const MainApp());

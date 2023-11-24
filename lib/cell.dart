@@ -1,15 +1,17 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:xlox_flutter/board.dart';
-import 'package:xlox_flutter/structure.dart';
+import 'package:xlox_flutter/position.dart';
 import 'package:xlox_flutter/utils.dart';
 import 'main.dart';
 
 // ignore: must_be_immutable
 class Cell extends StatefulWidget {
   Function() refresh;
-  int x, y, colorIndex = 0;
-  Cell({super.key, required this.refresh, required this.x, required this.y});
+  int colorIndex = 0;
+  Position p;
+  Cell({super.key, required this.refresh, required this.p});
 
   @override
   State<Cell> createState() => _CellState();
@@ -18,9 +20,9 @@ class Cell extends StatefulWidget {
 class _CellState extends State<Cell> {
   @override
   Widget build(BuildContext context) {
-    if (Board.staticBoard[widget.x][widget.y] == 0) {
+    if (s.staticBoard[widget.p.x][widget.p.y] == 0) {
       widget.colorIndex = 0;
-    } else if (Board.staticBoard[widget.x][widget.y] == 1) {
+    } else if (s.staticBoard[widget.p.x][widget.p.y] == 1) {
       widget.colorIndex = 1;
     } else {
       widget.colorIndex = 2;
@@ -40,17 +42,26 @@ class _CellState extends State<Cell> {
             ),
           ),
           onTap: () {
-            if (Structure.checkOnTap(widget.x, widget.y)) {
+            //print(s.depthOfhill);
+            // s.bfsState([2,2], s.isFinal());
+            print(s.cost);
+            if (s.checkOnTap([widget.p.x,widget.p.y])) {
               if (kDebugMode) {
                 print("White Cell");
               }
-              S.changeCell(widget.x, widget.y);
+              s.changeCell([widget.p.x,widget.p.y]);
               widget.refresh();
               if (kDebugMode) {
-                print(Board.staticBoard);
+               // print("now: ${s.staticBoard}");
+                //print("next State: ${s.getNextState(s)}");
+                //print(s.next_state([widget.p.x,widget.p.y]));
+               
+                //print(s.countNodedfs);
+                // s.bfs(s.getNextState(s));
+                // print(s.countNodebfs);
               }
             }
-            if (Structure.isFinal()) {
+            if (s.isFinal()) {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -60,12 +71,30 @@ class _CellState extends State<Cell> {
                             child: const Text('Play Again'),
                             onPressed: () {
                               widget.refresh();
-                              Board.staticBoard = [
-                                [0, 0, 0, 0, 0],
-                                [0, 1, 1, 1, 0],
-                                [0, 1, 2, 1, 0],
-                                [0, 1, 1, 1, 0],
-                                [0, 0, 0, 0, 0],
+                              s.staticBoard = [
+                                // [0, 0, 0, 0, 0],
+                                // [0, 1, 1, 1, 0],
+                                // [0, 1, 2, 1, 0],
+                                // [0, 1, 1, 1, 0],
+                                // [0, 0, 0, 0, 0],
+                                //level 6
+                                // [0, 0, 0, 0, 0, 0, 0], // 0
+                                // [0, 1, 1, 1, 1, 1, 0], // 1
+                                // [0, 2, 0, 2, 0, 2, 0], // 2
+                                // [0, 1, 1, 1, 1, 1, 0], // 3
+                                // [0, 0, 0, 0, 0, 0, 0], // 4
+                                // [0,0,0,0,0],
+                                // [0,1,1,1,0],
+                                // [0,1,0,1,0],
+                                // [0,2,0,2,0],
+                                // [0,0,0,0,0],
+                                [0,0,0,0,0],
+                                [0,1,1,1,0],
+                                [0,0,0,2,0],
+                                [0,1,1,1,0],
+                                [0,2,0,0,0],
+                                [0,1,1,1,0],
+                                [0,0,0,0,0],
                               ];
                               Navigator.of(context).pop();
                             },
